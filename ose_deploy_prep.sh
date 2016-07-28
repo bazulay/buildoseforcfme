@@ -1,11 +1,7 @@
-MASTERFQDN=master.local.domb.com
-#NODE1FQDN=node1.local.domb.com
-#NODE2FQDN=node2.local.domb.com
-#NODE3FQDN=node3.local.domb.com
-RHNUSER=youruser
-RHNPASSWORD=yourpass
-POOLID=yourpool
- 
+#!/bin/bash
+
+source ./ose_deploy.conf
+
 echo "Registering System"
 subscription-manager register --username=$RHNUSER --password=$RHNPASSWORD
 subscription-manager attach --pool=$POOLID

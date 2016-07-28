@@ -1,15 +1,7 @@
 #!/bin/bash
 # Create an OSEv3 group that contains the masters and nodes groups
- 
-MASTERFQDN='master.local.domb.com'
-#NODE1FQDN='node1.local.domb.com'
-#NODE2FQDN='node2.local.domb.com'
-#NODE3FQDN='node3.local.domb.com'
-SUBDOMAIN='apps.local.domb.com'
-HAWKULARFQDN=$MASTERFQDN
-USER1=admin
-USER2=''
-######################################################################
+
+source ./ose_deploy.conf
  
 cd ~
  

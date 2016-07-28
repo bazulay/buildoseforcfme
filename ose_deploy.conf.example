@@ -1,0 +1,11 @@
+MASTERFQDN=master.local.domb.com
+NODE1FQDN=node1.local.domb.com
+#NODE2FQDN=node2.local.domb.com
+#NODE3FQDN=node3.local.domb.com
+RHNUSER=youruser
+RHNPASSWORD=yourpass
+POOLID=yourpool
+SUBDOMAIN='apps.local.domb.com'
+HAWKULARFQDN=$MASTERFQDN
+ADMIN=admin
+USER1=user1
