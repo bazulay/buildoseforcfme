@@ -44,15 +44,15 @@ echo "making master node schedulable"
 oadm manage-node $MASTERFQDN --schedulable=true
  
  
+if [ -n "${ADMIN}" ]; then
+    echo "Creating user $ADMIN"
+    htpasswd /etc/origin/htpasswd $ADMIN
+    oadm policy add-cluster-role-to-user cluster-admin $ADMIN
+fi
+ 
 if [ -n "${USER1}" ]; then
     echo "Creating user $USER1"
     htpasswd /etc/origin/htpasswd $USER1
-    oadm policy add-cluster-role-to-user cluster-admin $USER1
-fi
- 
-if [ -n "${USER2}" ]; then
-    echo "Creating user $USER2"
-    htpasswd /etc/origin/htpasswd $USER2
 fi
  
 echo "login as admin"
