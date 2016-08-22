@@ -10,6 +10,7 @@ cat <<EOF | tee /etc/ansible/hosts
 [OSEv3:children]
 masters
 nodes
+nfs
  
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -32,9 +33,11 @@ $MASTERFQDN
 # host group for nodes, includes region info
 [nodes]
 $MASTERFQDN openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
-#$NODE1FQDN openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
-#$NODE2FQDN openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
-#$NODE3FQDN openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
+$NODE1FQDN openshift_node_labels="{'region': 'apps', 'zone': 'east'}"
+$NODE2FQDN openshift_node_labels="{'region': 'apps', 'zone': 'west'}"
+$NODE3FQDN openshift_node_labels="{'region': 'apps', 'zone': 'west'}"
+
+${NFS}
 EOF
  
 echo "Running Asible"
