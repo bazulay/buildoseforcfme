@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 source ./ose_deploy.conf
 
@@ -19,7 +19,7 @@ yum update -y
 ### Install utilites for quick and advanced installation"
 yum -y install atomic-openshift-utils
  
-yum install -y docker-1.10.3
+yum install -y docker-1.9
 mkdir /images
 chmod a+rwx /images
  
