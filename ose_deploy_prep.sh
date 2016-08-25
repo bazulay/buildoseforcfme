@@ -36,24 +36,24 @@ then
   if [ -n "${NODE1FQDN}" ]; then
     echo "Copying keys to $NODE1FQDN"
     ssh-copy-id root@$NODE1FQDN
-    scp $(readlink -f $0) root@$NODE1FQDN:/root/
-    ssh root@$NODE1FQDN "chmod +x /root/prepforose.sh && ./prepforose.sh"
+    scp $(readlink -f $0) ose_deploy.conf root@$NODE1FQDN:/root/
+    ssh root@$NODE1FQDN "chmod +x /root/ose_deploy_prep.sh  && ./ose_deploy_prep.sh"
     ssh root@$NODE1FQDN "init 6"
   fi
  
   if [ -n "${NODE2FQDN}" ]; then
     echo "Copying keys to $NODE2FQDN"
     ssh-copy-id root@$NODE2FQDN
-    scp $(readlink -f $0)  root@$NODE2FQDN:/root/
-    ssh root@$NODE2FQDN "chmod +x /root/prepforose.sh && ./prepforose.sh"
+    scp $(readlink -f $0)  ose_deploy.conf root@$NODE2FQDN:/root/
+    ssh root@$NODE2FQDN "chmod +x /root/ose_deploy_prep.sh  && ./ose_deploy_prep.sh"
     ssh root@$NODE2FQDN "init 6"
   fi
  
   if [ -n "${NODE3FQDN}" ]; then
     echo "Copying keys to $NODE3FQDN"
     ssh-copy-id root@$NODE3FQDN
-    scp $(readlink -f $0)  root@$NODE3FQDN:/root/
-    ssh root@$NODE3FQDN "chmod +x /root/prepforose.sh && ./prepforose.sh"
+    scp $(readlink -f $0)  ose_deploy.conf root@$NODE3FQDN:/root/
+    ssh root@$NODE3FQDN "chmod +x /root/ose_deploy_prep.sh  && ./ose_deploy_prep.sh"
     ssh root@$NODE3FQDN "init 6"
   fi
 fi
