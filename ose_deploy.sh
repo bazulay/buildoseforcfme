@@ -32,7 +32,7 @@ $MASTERFQDN
  
 # host group for nodes, includes region info
 [nodes]
-$MASTERFQDN openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+$MASTERFQDN openshift_node_labels="{'region': 'infra', 'zone': 'default'}" openshift_scheduleable=True
 $NODE1FQDN openshift_node_labels="{'region': 'apps', 'zone': 'east'}"
 $NODE2FQDN openshift_node_labels="{'region': 'apps', 'zone': 'west'}"
 $NODE3FQDN openshift_node_labels="{'region': 'apps', 'zone': 'west'}"
