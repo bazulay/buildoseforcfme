@@ -1,15 +1,7 @@
 #!/bin/bash
 # Create an OSEv3 group that contains the masters and nodes groups
- 
-MASTERFQDN='master.local.domb.com'
-#NODE1FQDN='node1.local.domb.com'
-#NODE2FQDN='node2.local.domb.com'
-#NODE3FQDN='node3.local.domb.com'
-SUBDOMAIN='apps.local.domb.com'
-HAWKULARFQDN=$MASTERFQDN
-USER1=admin
-USER2=''
-######################################################################
+
+source ./ose_deploy.conf
  
 cd ~
  
@@ -18,6 +10,7 @@ cat <<EOF | tee /etc/ansible/hosts
 [OSEv3:children]
 masters
 nodes
+nfs
  
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -40,9 +33,11 @@ $MASTERFQDN
 # host group for nodes, includes region info
 [nodes]
 $MASTERFQDN openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
-#$NODE1FQDN openshift_node_labels="{'region': 'primary', 'zone': 'east'}"
-#$NODE2FQDN openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
-#$NODE3FQDN openshift_node_labels="{'region': 'primary', 'zone': 'west'}"
+$NODE1FQDN openshift_node_labels="{'region': 'apps', 'zone': 'east'}"
+$NODE2FQDN openshift_node_labels="{'region': 'apps', 'zone': 'west'}"
+$NODE3FQDN openshift_node_labels="{'region': 'apps', 'zone': 'west'}"
+
+${NFS}
 EOF
  
 echo "Running Asible"
@@ -52,22 +47,22 @@ echo "making master node schedulable"
 oadm manage-node $MASTERFQDN --schedulable=true
  
  
+if [ -n "${ADMIN}" ]; then
+    echo "Creating user $ADMIN"
+    htpasswd /etc/origin/htpasswd $ADMIN
+    oadm policy add-cluster-role-to-user cluster-admin $ADMIN
+fi
+ 
 if [ -n "${USER1}" ]; then
     echo "Creating user $USER1"
     htpasswd /etc/origin/htpasswd $USER1
-    oadm policy add-cluster-role-to-user cluster-admin $USER1
-fi
- 
-if [ -n "${USER2}" ]; then
-    echo "Creating user $USER2"
-    htpasswd /etc/origin/htpasswd $USER2
 fi
  
 echo "login as admin"
 oc login -u system:admin
  
 echo "creating registery"
-oadm registry --service-account=registry --config=/etc/origin/master/admin.kubeconfig --credentials=/etc/origin/master/openshift-registry.kubeconfig --images='registry.access.redhat.com/openshift3/ose-${component}:${version}' --mount-host=/images
+#oadm registry --service-account=registry --config=/etc/origin/master/admin.kubeconfig --credentials=/etc/origin/master/openshift-registry.kubeconfig --images='registry.access.redhat.com/openshift3/ose-${component}:${version}' --mount-host=/images
  
 echo "creating cert"
 CA=/etc/origin/master
@@ -115,8 +110,7 @@ echo "creating router for managmeent metrics"
 oadm router management-metrics -n default --credentials=/etc/origin/master/openshift-router.kubeconfig --service-account=router --ports='443:5000' --selector="kubernetes.io/hostname=$MASTERFQDN" --stats-port=1937 --host-network=false
  
 #######################################################################################################
- 
-echo "MAUNUAL SETPS"
-echo "add line to /etc/origin/master-config.yaml"
-echo "assetConfig:"
-echo "metricsPublicURL: https://$HAWKULARFQDN/hawkular/metrics"
+
+sed "/assetConfig/s/assetConfig:/assetConfig:\n  metricsPublicURL: \"https\:\/\/$HAWKULARFQDN\/hawkular\/metrics\"/" -i /etc/origin/master/master-config.yaml
+
+systemctl restart atomic-openshift-master

@@ -1,0 +1,18 @@
+MASTERFQDN=master.local.domb.com
+NODE1FQDN=node1.local.domb.com
+NODE2FQDN=node2.local.domb.com
+NODE3FQDN=node3.local.domb.com
+RHNUSER=youruser
+RHNPASSWORD=yourpass
+POOLID=yourpool
+SUBDOMAIN='apps.local.domb.com'
+HAWKULARFQDN=${MASTERFQDN}
+ADMIN=admin
+USER1=user1
+CONFIG_NFS=true
+NFS_SERVER=${MASTERFQDN}
+NFS=''
+if [ "${CONFIG_NFS}" = true ] ; then
+  NEW_LINE=$'\n'
+  NFS="[nfs]${NEW_LINE}${NFS_SERVER}"
+fi
